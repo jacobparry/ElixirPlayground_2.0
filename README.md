@@ -201,7 +201,7 @@ A sandbox for learning Elixir and its environment
         2. `schema_migrations`
           * This is how the app keeps track of what migrations have been run.
 
-4. Create queries for `users` and `characters
+4. Create queries for `users` and `characters`
   * Create a file `user_queries.ex` at `elixir_playground_umbrella/apps/elvenhearth/lib/users/user_queries.ex`
   1. 
   ```
@@ -267,4 +267,54 @@ A sandbox for learning Elixir and its environment
         end
       end
     ```
-    
+5. Seeds
+  * Create a file `seed.exs` located at `elixir_playground_umbrella/apps/elvenhearth/priv/repo/seed.exs`
+    1. 
+      ```
+        alias Elvenhearth.Users.{User, UserQueries}
+        alias Elvenhearth.Characters.{Character, CharacterQueries}
+
+        unless(UserQueries.any) do
+          users = [
+            User.changeset(%User{}, %{
+              username: "test1",
+              password: "1234",
+              email: "test1@test.com"
+              }
+            ),
+            User.changeset(%User{}, %{
+              username: "test2",
+              password: "1234",
+              email: "test2@test.com"
+              }
+            ),
+            User.changeset(%User{}, %{
+              username: "test3",
+              password: "1234",
+              email: "test3@test.com"
+              }
+            )
+          ]
+
+          inserted_users =
+            Enum.map(users, fn(user) ->
+              UserQueries.create(user)
+            end)
+
+          Enum.map(inserted_users, fn(inserted_user) ->
+            {:ok, user} = inserted_user
+            Character.changeset(%Character{}, %{
+              name: "Rand",
+              race: "Human",
+              user_id: user.id
+            })
+            |> CharacterQueries.create()
+          end)
+        end
+      ```
+    2. Run `mix run priv/repo/seed.exs` from the logic app, `elvenhearth` to run the seeds.
+    3. Just play around with the seeds. You can see that there are a variety of topics that can be explored with what is happening in this file:
+      * `alias` allows you to use the last part of the path instead of having to type the whole thing out.
+      * `unless(UserQueries.any) do` allows for a simple way to only add seeds if there aren't already some in the database
+      * `User.changeset` ties to the user model that we created above. If you delete some of the fields, you an change the validity of the changeset. (pro tip, inspect the users list after making changes.)
+      * `Enum` is an elixir library that allows you to enumarate over lists in a variety of ways.
