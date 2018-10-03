@@ -28,3 +28,11 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env()}.exs"
+
+config :elvenhearth, Elvenhearth.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  database: "elvenhearth_01", # Names the Database whatever you want
+  username: "postgres",
+  password: "postgres"
+
+config :elvenhearth, ecto_repos: [Elvenhearth.Repo]
