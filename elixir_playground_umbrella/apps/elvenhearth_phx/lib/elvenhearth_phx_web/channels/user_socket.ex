@@ -1,6 +1,7 @@
 defmodule ElvenhearthPhxWeb.UserSocket do
   use Phoenix.Socket
 
+  use Absinthe.Phoenix.Socket, schema: ElvenhearthPhxWeb.Schema
   ## Channels
   # channel "room:*", ElvenhearthPhxWeb.RoomChannel
 

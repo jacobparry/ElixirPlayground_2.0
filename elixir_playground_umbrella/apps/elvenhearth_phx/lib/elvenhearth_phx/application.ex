@@ -10,6 +10,7 @@ defmodule ElvenhearthPhx.Application do
     children = [
       # Start the endpoint when the application starts
       supervisor(ElvenhearthPhxWeb.Endpoint, []),
+      supervisor(Absinthe.Subscription, [ElvenhearthPhxWeb.Endpoint])
       # Start your own worker by calling: ElvenhearthPhx.Worker.start_link(arg1, arg2, arg3)
       # worker(ElvenhearthPhx.Worker, [arg1, arg2, arg3]),
     ]

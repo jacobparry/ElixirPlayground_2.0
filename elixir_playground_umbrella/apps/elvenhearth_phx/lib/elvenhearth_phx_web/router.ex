@@ -19,6 +19,15 @@ defmodule ElvenhearthPhxWeb.Router do
     get "/", PageController, :index
   end
 
+  scope "/playground" do
+    pipe_through :api
+
+    forward("/graphiql", Absinthe.Plug.GraphiQL,
+      schema: ElvenhearthPhxWeb.Schema,
+      interface: :playground
+    )
+  end
+
   # Other scopes may use custom stacks.
   # scope "/api", ElvenhearthPhxWeb do
   #   pipe_through :api
