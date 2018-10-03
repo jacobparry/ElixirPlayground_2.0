@@ -113,6 +113,10 @@ A sandbox for learning Elixir and its environment
           end
         end
       ```
+6. From `elixir_playground_umbrella`, run the following command:
+  * `mix phx.server`
+  * Now navigate to localhost:4000/playground/graphiql
+  * You can explore this interface that will come into play later.
 
 # 2.0-models
 1. Create a `User` Model
