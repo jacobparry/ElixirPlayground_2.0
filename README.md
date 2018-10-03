@@ -28,6 +28,8 @@ A sandbox for learning Elixir and its environment
   * `mix phx.new elvenhearth_phx --no-ecto`
   * When asked, select `Y` or the default option for installing the dependencies.
   * The --no-ecto tells phoenix not to include the ecto wrapper or any of the files needed to interact with ecto.
+3. Navigate into `elixir_playground_umbrella/apps/elvenhearth_phx/assets`
+  * Run `npm install`
 
 # 1.3-setup-ecto
 1. Open the file `elixir_playground_umbrella/apps/elvenhearth/mix.exs`
@@ -73,7 +75,7 @@ A sandbox for learning Elixir and its environment
     3. `{:absinthe_phoenix, "~> 1.4"}` or https://hex.pm/packages/absinthe_phoenix for latest
     4. `{:absinthe_relay, "~> 1.4"}` or https://hex.pm/packages/absinthe_relay for latest
   * Run `mix deps.get`
-  
+
 2. Open the file `elixir_playground_umbrella/apps/elvenhearth_phx/lib/elvenhearth_phx/application.ex`
  * Inside of the `children = []` list in the `def start` function, add in:
     1. `supervisor(Absinthe.Subscription, [ElvenhearthPhxWeb.Endpoint])`
