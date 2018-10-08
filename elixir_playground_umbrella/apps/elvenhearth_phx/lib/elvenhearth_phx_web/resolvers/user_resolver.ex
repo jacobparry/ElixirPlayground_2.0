@@ -1,26 +1,11 @@
 defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
-
-  @users [
-    %{
-      username: "Rand",
-      password: "1234",
-      email: "test@test.com"
-    },
-    %{
-      username: "Perrin",
-      password: "5678"
-    }
-  ]
+  alias Elvenhearth.Users.UserQueries
 
   def list_users(_, _, _) do
-    {:ok, @users}
+    {:ok, UserQueries.get_all()}
   end
 
   def anonymize_password(_, _, _) do
     {:ok, "Wouldn't you like to know"}
-  end
-
-  def characters_for_user(_, _, _) do
-    {:ok, %{}}
   end
 end

@@ -4,11 +4,16 @@ defmodule Elvenhearth.Characters.CharacterQueries do
   alias Elvenhearth.Repo
   alias Elvenhearth.Characters.Character
 
+  def get_all() do
+    Repo.all(from Character)
+  end
+
   def get_all_for_user(user) do
     Repo.all(
       from c in Character,
       where: c.user_id == ^user.id
     )
+    |> IO.inspect
   end
 
   def any do

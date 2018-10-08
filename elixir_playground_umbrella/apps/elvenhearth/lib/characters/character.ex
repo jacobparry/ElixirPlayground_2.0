@@ -10,7 +10,7 @@ defmodule Elvenhearth.Characters.Character do
     timestamps()
   end
 
-  @required_fields ~w(name race)a
+  @required_fields ~w(name race user_id)a
 
   def changeset(character, params \\ %{}) do
     character

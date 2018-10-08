@@ -1,7 +1,7 @@
 defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
   use Absinthe.Schema.Notation
 
-  alias ElvenhearthPhxWeb.Resolvers.UserResolver
+  alias ElvenhearthPhxWeb.Resolvers.{UserResolver, CharacterResolver}
 
   object :user do
     field :username, :string
@@ -11,7 +11,7 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :email, non_null(:string)
 
     field :characters, list_of(:character) do
-      resolve &UserResolver.characters_for_user/3
+      resolve &CharacterResolver.get_characters_for_user/3
     end
   end
 
