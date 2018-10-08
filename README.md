@@ -322,3 +322,40 @@ A sandbox for learning Elixir and its environment
       * `unless(UserQueries.any) do` allows for a simple way to only add seeds if there aren't already some in the database
       * `User.changeset` ties to the user model that we created above. If you delete some of the fields, you an change the validity of the changeset. (pro tip, inspect the users list after making changes.)
       * `Enum` is an elixir library that allows you to enumarate over lists in a variety of ways.
+
+# 3.0-query-basics
+* In the `elixir_playground_umbrella/apps/elvenhearth_phx/lib/elvenhearth_phx_web/schema.ex` file, add the following stuff:
+1. Create the user object on the schema
+  ```
+    object :user do
+      field :username, :string
+      field :password, :string
+      field :email, non_null(:string)
+    end
+  ```
+
+2. Add the users list field in the query block
+  ```
+    field :users, list_of(:user) do
+      resolve &list_users/3
+    end
+  ```
+
+3. Create a sample resolver method and something to populate it with
+  ```
+    @users [
+      %{
+        username: "Rand",
+        password: "1234",
+        email: "test@test.com"
+      },
+      %{
+        username: "Perrin",
+        password: "5678"
+      }
+    ]
+
+    def list_users(_, _, _) do
+      {:ok, @users}
+    end
+  ```

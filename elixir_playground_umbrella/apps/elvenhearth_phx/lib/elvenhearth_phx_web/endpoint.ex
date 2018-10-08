@@ -1,5 +1,6 @@
 defmodule ElvenhearthPhxWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :elvenhearth_phx
+  use Absinthe.Phoenix.Endpoint
 
   socket "/socket", ElvenhearthPhxWeb.UserSocket
 
