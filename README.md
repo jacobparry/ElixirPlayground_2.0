@@ -359,3 +359,7 @@ A sandbox for learning Elixir and its environment
       {:ok, @users}
     end
   ```
+
+# 4.0-domain-structure
+1. Break the Objects and the Query fields out into separate modules
+  * 
