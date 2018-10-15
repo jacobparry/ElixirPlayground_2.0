@@ -577,3 +577,24 @@ A sandbox for learning Elixir and its environment
       end
     end
   ```
+
+# 4.2-query-infite-loop
+1. We are going to add an infinite loop to our queries to show that care needs to be taken.
+  * In the `user_queries.ex` module, change the `def get_by_id do` function to return `Repo.one` instead of `Repo.all`.
+  * In the `user_resolver.ex` module, add the following function:
+  ```
+    def get_user_for_character(character, _, _) do
+      {:ok, UserQueries.get_by_id(character.user_id)}
+    end
+  ```
+  * In the `object_types.ex` module, add a new field to the character object. That object should look like this afterwards:
+  ```
+    object :character do
+      field :name, :string
+      field :race, :string
+      field :user, :user do
+        resolve &UserResolver.get_user_for_character/3
+      end
+    end
+  ```
+2. Now, in the Graphiql interface, make your queries. You are now able to just query into the user and then character and then back into the user over and over again. Care needs to be taken to avoid things like this.
