@@ -13,7 +13,7 @@ defmodule Elvenhearth.Users.UserQueries do
       from u in User,
       where: u.id == ^id
 
-    Repo.all(query)
+    Repo.one(query)
   end
 
   def any do
