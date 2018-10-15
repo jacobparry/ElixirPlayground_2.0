@@ -5,7 +5,8 @@ defmodule ElixirPlaygroundUmbrella.MixProject do
     [
       apps_path: "apps",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -16,5 +17,13 @@ defmodule ElixirPlaygroundUmbrella.MixProject do
   # Run "mix help deps" for examples and options.
   defp deps do
     []
+  end
+
+  defp aliases do
+    [
+      {:setup, ["ecto.drop", "ecto.create", "ecto.migrate"]},
+      {:reset, ["ecto.drop", "ecto.create", "ecto.migrate", "run apps/elvenhearth/priv/repo/seed.exs"]},
+      {:seed, "run apps/elvenhearth/priv/repo/seed.exs"}
+    ]
   end
 end

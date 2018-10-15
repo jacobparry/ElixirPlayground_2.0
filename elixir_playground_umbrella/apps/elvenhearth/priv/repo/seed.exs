@@ -4,21 +4,21 @@ alias Elvenhearth.Characters.{Character, CharacterQueries}
 unless(UserQueries.any) do
   users = [
     User.changeset(%User{}, %{
-      username: "test1",
+      username: "user1",
       password: "1234",
-      email: "test1@test.com"
+      email: "user1@test.com"
       }
     ),
     User.changeset(%User{}, %{
-      username: "test2",
+      username: "user2",
       password: "1234",
-      email: "test2@test.com"
+      email: "user2@test.com"
       }
     ),
     User.changeset(%User{}, %{
-      username: "test3",
+      username: "user3",
       password: "1234",
-      email: "test3@test.com"
+      email: "user3@test.com"
       }
     )
   ]
@@ -28,13 +28,37 @@ unless(UserQueries.any) do
       UserQueries.create(user)
     end)
 
-  Enum.map(inserted_users, fn(inserted_user) ->
-    {:ok, user} = inserted_user
+  [{_, user1}, {_, user2}, {_, user3}] = inserted_users
+
+  character_list = [
     Character.changeset(%Character{}, %{
       name: "Rand",
-      race: "Human",
-      user_id: user.id
+      race: "Dragon",
+      user_id: user1.id
+    }),
+    Character.changeset(%Character{}, %{
+      name: "Matt",
+      race: "Fox",
+      user_id: user2.id
+    }),
+    Character.changeset(%Character{}, %{
+      name: "Perrin",
+      race: "Wolf",
+      user_id: user3.id
+    }),
+    Character.changeset(%Character{}, %{
+      name: "Trolloc",
+      race: "Shadow Spawn",
     })
-    |> CharacterQueries.create()
-  end)
+  ]
+
+  # This is called a Comprehension. It is like a loop on steroids
+  for character <- character_list do
+    CharacterQueries.create(character)
+  end
+
+  # You can pattern match using comprehensions.
+  for %Ecto.Changeset{valid?: true, changes: changes} = changeset <- character_list do
+    IO.inspect(changes)
+  end
 end
