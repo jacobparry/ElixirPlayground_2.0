@@ -598,3 +598,17 @@ A sandbox for learning Elixir and its environment
     end
   ```
 2. Now, in the Graphiql interface, make your queries. You are now able to just query into the user and then character and then back into the user over and over again. Care needs to be taken to avoid things like this.
+
+# 4.3-apollo-tracing
+1. We are going to add Apollo Tracing so that we can see the time each request takes in Graphiql
+  * Add the dependency to the phoenix `mix.exs` file, found here https://hex.pm/packages/apollo_tracing
+  * At the top of the `schema.ex` module, add `use ApolloTracing` right under `use Absinthe.Schema`.
+  * In the `router.ex` module, we need to add the `pipeline: {ApolloTracing.Pipeline, :plug}` to our forward route. It should look like this:
+  ```
+    forward("/graphiql", Absinthe.Plug.GraphiQL,
+      schema: ElvenhearthPhxWeb.Schema,
+      interface: :playground,
+      pipeline: {ApolloTracing.Pipeline, :plug}
+    )
+  ```
+2. Now, when you run the GraphQL query in Graphiql, the Tracing portion will now work and tell how long each field took to resolve.

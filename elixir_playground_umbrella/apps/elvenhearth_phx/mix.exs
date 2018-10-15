@@ -40,6 +40,7 @@ defmodule ElvenhearthPhx.Mixfile do
       {:absinthe_plug, "~> 1.4"},
       {:absinthe_phoenix, "~> 1.4"},
       {:absinthe_relay, "~> 1.4"},
+      {:apollo_tracing, "~> 0.4.1"},
       {:phoenix, "~> 1.3.4"},
       {:phoenix_pubsub, "~> 1.0"},
       {:phoenix_html, "~> 2.10"},

@@ -1,5 +1,6 @@
 defmodule ElvenhearthPhxWeb.Schema do
   use Absinthe.Schema
+  use ApolloTracing
 
   import_types ElvenhearthPhxWeb.Schema.ObjectTypes
   import_types ElvenhearthPhxWeb.Schema.ObjectQueries

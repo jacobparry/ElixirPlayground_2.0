@@ -24,7 +24,8 @@ defmodule ElvenhearthPhxWeb.Router do
 
     forward("/graphiql", Absinthe.Plug.GraphiQL,
       schema: ElvenhearthPhxWeb.Schema,
-      interface: :playground
+      interface: :playground,
+      pipeline: {ApolloTracing.Pipeline, :plug}
     )
   end
 
