@@ -4,6 +4,7 @@ defmodule ElvenhearthPhxWeb.Schema do
 
   import_types ElvenhearthPhxWeb.Schema.ObjectTypes
   import_types ElvenhearthPhxWeb.Schema.ObjectQueries
+  import_types ElvenhearthPhxWeb.Schema.ObjectMutations
 
   query do
     field :health, :string do
@@ -14,4 +15,11 @@ defmodule ElvenhearthPhxWeb.Schema do
 
     import_fields :object_queries
   end
+
+  mutation do
+
+    import_fields :object_mutations
+  end
+
+
 end

@@ -22,4 +22,9 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
       resolve &UserResolver.get_user_for_character/3
     end
   end
+
+  input_object :create_character_input do
+    field :name, non_null(:string)
+    field :race, non_null(:string)
+  end
 end
