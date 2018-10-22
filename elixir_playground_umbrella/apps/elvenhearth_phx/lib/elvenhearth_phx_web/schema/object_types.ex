@@ -23,6 +23,13 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     end
   end
 
+  input_object :create_user_input do
+    field :username, non_null(:string)
+    field :password, non_null(:string)
+    field :email, non_null(:string)
+    field :age, :integer
+  end
+
   input_object :create_character_input do
     field :name, non_null(:string)
     field :race, non_null(:string)
