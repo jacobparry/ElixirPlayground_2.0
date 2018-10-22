@@ -13,7 +13,7 @@ defmodule Elvenhearth.Characters.CharacterQueries do
       from c in Character,
       where: c.user_id == ^user.id
     )
-    |> IO.inspect
+    # |> IO.inspect
   end
 
   def any do
