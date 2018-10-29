@@ -35,4 +35,12 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :race, non_null(:string)
     field :user_id, non_null(:string)
   end
+
+  input_object :update_user_input do
+    field :id, non_null(:integer)
+    field :username, :string
+    field :password, :string
+    field :email, :string
+    field :age, :string
+  end
 end

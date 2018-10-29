@@ -19,4 +19,13 @@ defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
 
     UserQueries.create(user)
   end
+
+  def update_user(_parent, %{input: params} = args, _resolution) do
+    user = UserQueries.get_by_id(params[:id])
+    IO.inspect user
+
+    updated_user = User.update(user, params)
+
+    UserQueries.update(updated_user)
+  end
 end

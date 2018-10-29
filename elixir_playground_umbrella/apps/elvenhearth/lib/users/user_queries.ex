@@ -28,4 +28,8 @@ defmodule Elvenhearth.Users.UserQueries do
   def create(user) do
     Repo.insert(user)
   end
+
+  def update(user) do
+    Repo.update(user)
+  end
 end

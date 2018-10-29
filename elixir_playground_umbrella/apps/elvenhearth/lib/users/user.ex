@@ -17,9 +17,16 @@ defmodule Elvenhearth.Users.User do
   @required_fields ~w(username password email)a
   @optional_fields ~w(age)a
 
+
   def changeset(user, params \\ %{}) do
     user
     |> cast(params, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields) #
+  end
+
+  def update(user, params \\ %{}) do
+    user
+    |> cast(params, @required_fields ++ @optional_fields)
+    |> IO.inspect()
   end
 end

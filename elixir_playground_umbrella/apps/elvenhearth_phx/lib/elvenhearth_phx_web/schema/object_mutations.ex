@@ -13,6 +13,11 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectMutations do
       arg :input, non_null(:create_user_input)
       resolve &UserResolver.create_user/3
     end
+
+    field :update_user, :user do
+      arg :input, non_null(:update_user_input)
+      resolve &UserResolver.update_user/3
+    end
   end
 
 
