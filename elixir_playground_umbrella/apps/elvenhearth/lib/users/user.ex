@@ -5,7 +5,7 @@ defmodule Elvenhearth.Users.User do
 
   schema "users" do
     field :username, :string
-    field :password, Comeonin.Ecto.Password
+    field :password, :string
     field :email, :string
     field :age, :integer
 
