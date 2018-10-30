@@ -4,9 +4,10 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
   alias ElvenhearthPhxWeb.Resolvers.{UserResolver, CharacterResolver}
 
   object :user do
-    field :id, :string
     field :username, :string
-    field :password, :string
+    field :password, :string do
+      resolve &UserResolver.anonymize_password/3
+    end
     field :email, non_null(:string)
 
     field :characters, list_of(:character) do

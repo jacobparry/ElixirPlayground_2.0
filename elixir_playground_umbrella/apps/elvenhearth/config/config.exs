@@ -29,8 +29,6 @@ use Mix.Config
 #
 #     import_config "#{Mix.env()}.exs"
 
-config :comeonin, Ecto.Password, Comeonin.Pbkdf2
-
 config :elvenhearth, Elvenhearth.Repo,
   adapter: Ecto.Adapters.Postgres,
   database: "elvenhearth_01", # Names the Database whatever you want
