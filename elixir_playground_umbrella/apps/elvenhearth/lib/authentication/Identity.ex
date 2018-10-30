@@ -1,6 +1,6 @@
-defmodule Elvenhearth.Authentication.Authenticate do
+defmodule Elvenhearth.Authentication.Identity do
   @moduledoc """
-  The Authentication context
+  The Identity context
   """
 
   import Ecto.Query
