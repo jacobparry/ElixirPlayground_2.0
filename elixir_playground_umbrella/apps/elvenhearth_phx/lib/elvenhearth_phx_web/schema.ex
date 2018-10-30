@@ -21,5 +21,18 @@ defmodule ElvenhearthPhxWeb.Schema do
     import_fields :object_mutations
   end
 
+  subscription do
+    field :new_user, :user do
+      config fn _args, _info ->
+        {:ok, topic: "*"}
+      end
+      resolve fn root, _, _ ->
+        IO.inspect(root)
+        {:ok, root}
+      end
+    end
+
+
+  end
 
 end

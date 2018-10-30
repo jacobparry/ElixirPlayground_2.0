@@ -17,7 +17,13 @@ defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
   def create_user(_parent, %{input: params} = args, _resolution) do
     user = User.changeset(%User{}, params)
 
-    UserQueries.create(user)
+    case UserQueries.create(user) do
+      {:ok, user} ->
+        Absinthe.Subscription.publish(ElvenhearthPhxWeb.Endpoint, user, new_user: "*")
+        {:ok, user}
+      _error ->
+        {:ok, nil}
+    end
   end
 
   def update_user(_parent, %{input: params} = args, _resolution) do
