@@ -5,6 +5,7 @@ defmodule ElvenhearthPhxWeb.Schema do
   import_types ElvenhearthPhxWeb.Schema.ObjectTypes
   import_types ElvenhearthPhxWeb.Schema.ObjectQueries
   import_types ElvenhearthPhxWeb.Schema.ObjectMutations
+  import_types ElvenhearthPhxWeb.Schema.ObjectSubscriptions
 
   query do
     field :health, :string do
@@ -17,22 +18,11 @@ defmodule ElvenhearthPhxWeb.Schema do
   end
 
   mutation do
-
     import_fields :object_mutations
   end
 
   subscription do
-    field :new_user, :user do
-      config fn _args, _info ->
-        {:ok, topic: "*"}
-      end
-      resolve fn root, _, _ ->
-        IO.inspect(root)
-        {:ok, root}
-      end
-    end
-
-
+    import_fields :object_subscriptions
   end
 
 end
