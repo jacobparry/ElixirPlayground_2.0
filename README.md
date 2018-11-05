@@ -322,3 +322,293 @@ A sandbox for learning Elixir and its environment
       * `unless(UserQueries.any) do` allows for a simple way to only add seeds if there aren't already some in the database
       * `User.changeset` ties to the user model that we created above. If you delete some of the fields, you an change the validity of the changeset. (pro tip, inspect the users list after making changes.)
       * `Enum` is an elixir library that allows you to enumarate over lists in a variety of ways.
+
+# 3.0-query-basics
+* In the `elixir_playground_umbrella/apps/elvenhearth_phx/lib/elvenhearth_phx_web/schema.ex` file, add the following stuff:
+1. Create the user object on the schema
+  ```
+    object :user do
+      field :username, :string
+      field :password, :string
+      field :email, non_null(:string)
+    end
+  ```
+
+2. Add the users list field in the query block
+  ```
+    field :users, list_of(:user) do
+      resolve &list_users/3
+    end
+  ```
+
+3. Create a sample resolver method and something to populate it with
+  ```
+    @users [
+      %{
+        username: "Rand",
+        password: "1234",
+        email: "test@test.com"
+      },
+      %{
+        username: "Perrin",
+        password: "5678"
+      }
+    ]
+
+    def list_users(_, _, _) do
+      {:ok, @users}
+    end
+  ```
+
+# 4.0-resolver-and-domain-basics
+1. Break the Objects and the Query fields out into separate modules
+  * Create several modules in a new folder, `elixir_playground_umbrella/apps/elvenhearth_phx/lib/elvenhearth_phx_web/schema`
+  * `ObjectTypes` - This is where you will put all of the absinthe objects such as `object :user`, `object :character`.
+  * `ObjectQueries` - This is where you will put any of the queries that will go in the `schema.query do` block.
+2. In the `elixir_playground_umbrella/apps/elvenhearth_phx/lib/elvenhearth_phx_web/schema.ex` module, you will add a few lines:
+  * At the top of the module, under the `use Absinthe.Schema`, add `import_types ElvenhearthPhxWeb.Schema.ObjectTypes` and `import_types ElvenhearthPhxWeb.Schema.ObjectQueries`. This allows the broken out modules to be added to the schema.
+  * At the bottom of the `query do` block, add the line `import_fields :object_queries`. This imports the query fields that we have implemented in `ObjectQueries` module.
+
+3. Let's add a couple of resolver modules. Create a folder, `elixir_playground_umbrella/apps/elvenhearth_phx/lib/elvenhearth_phx_web/resolvers`. Create two modules in that folder:
+  * `user_resolver.ex`
+  * `character_resolver.ex`
+  * These files are used as the intermediate logic layer between the actual logic application and the graphql schema.
+  * Create a couple of functions in these that you will reference instead of the anonymous functions in the schema fields.
+
+4. The following files should look like this:
+  * The `user_resolver.ex` should now look like this:
+    ```
+    defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
+      alias Elvenhearth.Users.UserQueries
+
+      def list_users(_, _, _) do
+        {:ok, UserQueries.get_all()}
+      end
+
+      def anonymize_password(_, _, _) do
+        {:ok, "Wouldn't you like to know"}
+      end
+    end
+    ```
+  
+  * The `character_resolver.ex` should now look like this:
+    ```
+    defmodule ElvenhearthPhxWeb.Resolvers.CharacterResolver do
+      alias Elvenhearth.Characters.CharacterQueries
+
+      def list_characters(_, _, _) do
+        {:ok, CharacterQueries.get_all()}
+      end
+
+      def get_characters_for_user(user, _, _) do
+        {:ok, CharacterQueries.get_all_for_user(user)}
+      end
+    end
+    ```
+
+  * The `schema.ex` file should now look like this:
+    ```
+    defmodule ElvenhearthPhxWeb.Schema do
+      use Absinthe.Schema
+
+      import_types ElvenhearthPhxWeb.Schema.ObjectTypes
+      import_types ElvenhearthPhxWeb.Schema.ObjectQueries
+
+      query do
+        field :health, :string do
+          resolve(fn _, _, _ ->
+            {:ok, "up"}
+          end)
+        end
+
+        import_fields :object_queries
+      end
+    end
+    ```
+  * The `object_types.ex` file should look like this:
+    ```
+    defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
+      use Absinthe.Schema.Notation
+
+      alias ElvenhearthPhxWeb.Resolvers.{UserResolver, CharacterResolver}
+
+      object :user do
+        field :username, :string
+        field :password, :string do
+          resolve &UserResolver.anonymize_password/3
+        end
+        field :email, non_null(:string)
+
+        field :characters, list_of(:character) do
+          resolve &CharacterResolver.get_characters_for_user/3
+        end
+      end
+
+      object :character do
+        field :name, :string
+        field :race, :string
+      end
+    end
+    ```
+  * The `object_queries.ex` file should look like this:
+  ```
+    defmodule ElvenhearthPhxWeb.Schema.ObjectQueries do
+      use Absinthe.Schema.Notation
+
+      alias ElvenhearthPhxWeb.Resolvers.{UserResolver, CharacterResolver}
+
+      object :object_queries do
+        field :users, list_of(:user) do
+          resolve &UserResolver.list_users/3
+        end
+
+        field :characters, list_of(:character) do
+          resolve &CharacterResolver.list_characters/3
+        end
+      end
+    end
+  ```
+
+# 4.1-seed-restructure-and-aliases
+1. We are going to restructure the `seed.exs` file for better functionality.
+  * We are doing this to show off `comprehensions`, which are like for-loops on steroids
+  * The file should look like this when you finish:
+  ```
+    alias Elvenhearth.Users.{User, UserQueries}
+    alias Elvenhearth.Characters.{Character, CharacterQueries}
+
+    unless(UserQueries.any) do
+      users = [
+        User.changeset(%User{}, %{
+          username: "user1",
+          password: "1234",
+          email: "user1@test.com"
+          }
+        ),
+        User.changeset(%User{}, %{
+          username: "user2",
+          password: "1234",
+          email: "user2@test.com"
+          }
+        ),
+        User.changeset(%User{}, %{
+          username: "user3",
+          password: "1234",
+          email: "user3@test.com"
+          }
+        )
+      ]
+
+      inserted_users =
+        Enum.map(users, fn(user) ->
+          UserQueries.create(user)
+        end)
+
+      [{_, user1}, {_, user2}, {_, user3}] = inserted_users
+
+      character_list = [
+        Character.changeset(%Character{}, %{
+          name: "Rand",
+          race: "Dragon",
+          user_id: user1.id
+        }),
+        Character.changeset(%Character{}, %{
+          name: "Matt",
+          race: "Fox",
+          user_id: user2.id
+        }),
+        Character.changeset(%Character{}, %{
+          name: "Perrin",
+          race: "Wolf",
+          user_id: user3.id
+        }),
+        Character.changeset(%Character{}, %{
+          name: "Trolloc",
+          race: "Shadow Spawn",
+        })
+      ]
+
+      # This is called a Comprehension. It is like a loop on steroids
+      for character <- character_list do
+        CharacterQueries.create(character)
+      end
+
+      # You can pattern match using comprehensions.
+      for %Ecto.Changeset{valid?: true, changes: changes} = changeset <- character_list do
+        IO.inspect(changes)
+      end
+    end
+  ```
+
+2. We are going to setup some mix aliases to run multiple mix commands with a single command.
+  * In the `elixir_playground_umbrella/mix.exs` file, we will add a couple of things:
+    1. Insde of the `def project do` block, add the line `aliases: aliases()` to the bottom of the list.
+    2. Create a function `defp aliases do` and have it just contain and empty list `[]`.
+  * This will allow you to run commands like `mix setup` that will drop, create, and migrate the database.
+  * The file should look like this at the end with several aliases setup:
+  ```
+    defmodule ElixirPlaygroundUmbrella.MixProject do
+      use Mix.Project
+
+      def project do
+        [
+          apps_path: "apps",
+          start_permanent: Mix.env() == :prod,
+          deps: deps(),
+          aliases: aliases()
+        ]
+      end
+
+      # Dependencies listed here are available only for this
+      # project and cannot be accessed from applications inside
+      # the apps folder.
+      #
+      # Run "mix help deps" for examples and options.
+      defp deps do
+        []
+      end
+
+      defp aliases do
+        [
+          {:setup, ["ecto.drop", "ecto.create", "ecto.migrate"]},
+          {:reset, ["ecto.drop", "ecto.create", "ecto.migrate", "run apps/elvenhearth/priv/repo/seed.exs"]},
+          {:seed, "run apps/elvenhearth/priv/repo/seed.exs"}
+        ]
+      end
+    end
+  ```
+
+# 4.2-query-infite-loop
+1. We are going to add an infinite loop to our queries to show that care needs to be taken.
+  * In the `user_queries.ex` module, change the `def get_by_id do` function to return `Repo.one` instead of `Repo.all`.
+  * In the `user_resolver.ex` module, add the following function:
+  ```
+    def get_user_for_character(character, _, _) do
+      {:ok, UserQueries.get_by_id(character.user_id)}
+    end
+  ```
+  * In the `object_types.ex` module, add a new field to the character object. That object should look like this afterwards:
+  ```
+    object :character do
+      field :name, :string
+      field :race, :string
+      field :user, :user do
+        resolve &UserResolver.get_user_for_character/3
+      end
+    end
+  ```
+2. Now, in the Graphiql interface, make your queries. You are now able to just query into the user and then character and then back into the user over and over again. Care needs to be taken to avoid things like this.
+
+# 4.3-apollo-tracing
+1. We are going to add Apollo Tracing so that we can see the time each request takes in Graphiql
+  * Add the dependency to the phoenix `mix.exs` file, found here https://hex.pm/packages/apollo_tracing
+  * At the top of the `schema.ex` module, add `use ApolloTracing` right under `use Absinthe.Schema`.
+  * In the `router.ex` module, we need to add the `pipeline: {ApolloTracing.Pipeline, :plug}` to our forward route. It should look like this:
+  ```
+    forward("/graphiql", Absinthe.Plug.GraphiQL,
+      schema: ElvenhearthPhxWeb.Schema,
+      interface: :playground,
+      pipeline: {ApolloTracing.Pipeline, :plug}
+    )
+  ```
+2. Now, when you run the GraphQL query in Graphiql, the Tracing portion will now work and tell how long each field took to resolve.
