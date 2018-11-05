@@ -23,6 +23,16 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     end
   end
 
+  object :create_character_result do
+    field :character, :character
+    field :errors, list_of(:input_error)
+  end
+
+  object :input_error do
+    field :key, non_null(:string)
+    field :message, non_null(:string)
+  end
+
   input_object :create_user_input do
     field :username, non_null(:string)
     field :password, non_null(:string)

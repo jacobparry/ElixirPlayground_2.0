@@ -4,7 +4,7 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectMutations do
   alias ElvenhearthPhxWeb.Resolvers.{UserResolver, CharacterResolver}
 
   object :object_mutations do
-    field :create_character, :character do
+    field :create_character, :create_character_result do
       arg :input, non_null(:create_character_input)
       resolve &CharacterResolver.create_character/3
     end
