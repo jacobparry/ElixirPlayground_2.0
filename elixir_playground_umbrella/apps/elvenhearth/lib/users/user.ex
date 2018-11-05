@@ -21,7 +21,8 @@ defmodule Elvenhearth.Users.User do
   def changeset(user, params \\ %{}) do
     user
     |> cast(params, @required_fields ++ @optional_fields)
-    |> validate_required(@required_fields) #
+    |> validate_required(@required_fields)
+    |> unique_constraint(:username)
   end
 
   def update(user, params \\ %{}) do

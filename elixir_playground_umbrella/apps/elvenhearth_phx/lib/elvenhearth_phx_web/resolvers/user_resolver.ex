@@ -21,17 +21,33 @@ defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
       {:ok, user} ->
         Absinthe.Subscription.publish(ElvenhearthPhxWeb.Endpoint, user, new_user: "*")
         {:ok, user}
-      _error ->
-        {:ok, nil}
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create user",
+          details: error_details(changeset)
+        }
     end
+  end
+
+  defp error_details(changeset) do
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn {msg, _} -> msg end)
   end
 
   def update_user(_parent, %{input: params} = args, _resolution) do
     user = UserQueries.get_by_id(params[:id])
-    IO.inspect user
-
-    updated_user = User.update(user, params)
-
-    UserQueries.update(updated_user)
+    updated_user = User.changeset(user, params)
+    IO.inspect(updated_user)
+    case UserQueries.update(updated_user) do
+      {:ok, _} = success ->
+        success
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not update user",
+          details: error_details(changeset)
+        }
+    end
   end
 end

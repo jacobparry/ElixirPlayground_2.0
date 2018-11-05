@@ -16,5 +16,6 @@ defmodule Elvenhearth.Characters.Character do
     character
     |> cast(params, @required_fields)
     |> validate_required(@required_fields)
+    |> unique_constraint(:race)
   end
 end

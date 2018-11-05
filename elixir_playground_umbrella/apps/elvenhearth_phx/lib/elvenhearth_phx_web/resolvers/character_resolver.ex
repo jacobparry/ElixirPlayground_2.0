@@ -13,6 +13,20 @@ defmodule ElvenhearthPhxWeb.Resolvers.CharacterResolver do
   def create_character(_parent, %{input: params} = args, _resolution) do
     character = Character.changeset(%Character{}, params)
 
-    CharacterQueries.create(character)
+    case CharacterQueries.create(character) do
+      {:ok, _} = success ->
+        success
+      {:error, changeset} ->
+        {
+          :error,
+          message: "Could not create Character",
+          details: error_details(changeset)
+        }
+    end
+  end
+
+  defp error_details(changeset) do
+    changeset
+    |> Ecto.Changeset.traverse_errors(fn {msg, _} -> msg end)
   end
 end
