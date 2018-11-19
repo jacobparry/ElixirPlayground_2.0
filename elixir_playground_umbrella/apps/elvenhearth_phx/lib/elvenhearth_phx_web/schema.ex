@@ -34,6 +34,7 @@ defmodule ElvenhearthPhxWeb.Schema do
     ]
     middleware
     |> add(:apollo_tracing, field, object)
+    |> add(:items, field, object)
     |> add(:changeset_errors, field, object)
   end
 
@@ -45,7 +46,13 @@ defmodule ElvenhearthPhxWeb.Schema do
     middleware ++ [Middleware.ChangesetErrors]
   end
 
-  defp add(middleware, :changeset_errors, _field, _object) do
+  defp add(middleware, :items, field, %{identifier: :item_info} = object) do
+    new_middleware = {Absinthe.Middleware.MapGet, to_string(field.identifier)}
+    middleware
+    |> Absinthe.Schema.replace_default(new_middleware, field, object)
+  end
+
+  defp add(middleware, _middleware_type, _field, _object) do
     middleware
   end
 end

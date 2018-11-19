@@ -34,17 +34,29 @@ unless(UserQueries.any) do
     Character.changeset(%Character{}, %{
       name: "Rand",
       race: "Dragon",
-      user_id: user1.id
+      user_id: user1.id,
+      items: [
+        %{"name" => "Dragon Scepter", "value" => "300gp"},
+        %{"name" => "Heron-marked Sword", "value" => "500gp"}
+      ]
     }),
     Character.changeset(%Character{}, %{
       name: "Matt",
       race: "Fox",
-      user_id: user2.id
+      user_id: user2.id,
+      items: [
+        %{"name" => "Ashandari", "value" => "800gp"},
+        %{"name" => "Fox Medalion", "value" => "9000gp"}
+      ]
     }),
     Character.changeset(%Character{}, %{
       name: "Perrin",
       race: "Wolf",
-      user_id: user3.id
+      user_id: user3.id,
+      items: [
+        %{"name" => "Black Yew Long Bow", "value" => "150gp"},
+        %{"name" => "War Hammer", "value" => "250gp"}
+      ]
     }),
     Character.changeset(%Character{}, %{
       name: "Trolloc",

@@ -21,6 +21,12 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :user, :user do
       resolve &UserResolver.get_user_for_character/3
     end
+    field :items, list_of(:item_info)
+  end
+
+  object :item_info do
+    field :name, :string
+    field :value, :string
   end
 
   object :create_character_result do
