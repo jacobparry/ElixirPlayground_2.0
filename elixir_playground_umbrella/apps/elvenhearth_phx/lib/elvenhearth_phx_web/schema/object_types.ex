@@ -28,6 +28,16 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :errors, list_of(:input_error)
   end
 
+  object :create_user_result do
+    field :user, :user
+    field :errors, list_of(:input_error)
+  end
+
+  object :update_character_result do
+    field :character, :character
+    field :errors, list_of(:input_error)
+  end
+
   object :input_error do
     field :key, non_null(:string)
     field :message, non_null(:string)
@@ -52,5 +62,11 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :password, :string
     field :email, :string
     field :age, :string
+  end
+
+  input_object :update_character_input do
+    field :id, non_null(:integer)
+    field :name, :string
+    field :race, :string
   end
 end

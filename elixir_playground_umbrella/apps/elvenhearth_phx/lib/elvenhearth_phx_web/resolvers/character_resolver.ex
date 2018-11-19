@@ -12,26 +12,16 @@ defmodule ElvenhearthPhxWeb.Resolvers.CharacterResolver do
 
   def create_character(_parent, %{input: params} = args, _resolution) do
     character = Character.changeset(%Character{}, params)
-
-    case CharacterQueries.create(character) do
-      {:ok, character} = success ->
+    with {:ok, character} <- CharacterQueries.create(character) do
         {:ok, %{character: character}}
-      {:error, changeset} ->
-        {:ok, %{errors: transform_errors(changeset)}}
     end
   end
 
-  defp transform_errors(changeset) do
-    changeset
-    |> Ecto.Changeset.traverse_errors(&format_error/1)
-    |> Enum.map(fn {key, value} ->
-      %{key: key, message: value}
-    end)
-  end
-
-  defp format_error({msg, opts}) do
-    Enum.reduce(opts, msg, fn {key, value}, acc ->
-      String.replace(acc, "%{#{key}}", to_string(value))
-    end)
+  def update_character(_parent, %{input: params} = args, _resolution) do
+    character = CharacterQueries.get_by_id(params[:id])
+    updated_character = Character.changeset(character, params)
+    with {:ok, character} <- CharacterQueries.update(updated_character) do
+      {:ok, %{character: character}}
+    end
   end
 end

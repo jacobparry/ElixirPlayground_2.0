@@ -16,6 +16,14 @@ defmodule Elvenhearth.Characters.CharacterQueries do
     # |> IO.inspect
   end
 
+  def get_by_id(id) do
+    query =
+      from c in Character,
+      where: c.id == ^id
+
+    Repo.one(query)
+  end
+
   def any do
     count =
       Repo.one(
@@ -27,5 +35,9 @@ defmodule Elvenhearth.Characters.CharacterQueries do
 
   def create(character) do
     Repo.insert(character)
+  end
+
+  def update(character) do
+    Repo.update(character)
   end
 end

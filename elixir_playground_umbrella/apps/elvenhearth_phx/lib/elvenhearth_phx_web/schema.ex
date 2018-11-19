@@ -2,10 +2,12 @@ defmodule ElvenhearthPhxWeb.Schema do
   use Absinthe.Schema
   use ApolloTracing
 
-  import_types ElvenhearthPhxWeb.Schema.ObjectTypes
-  import_types ElvenhearthPhxWeb.Schema.ObjectQueries
-  import_types ElvenhearthPhxWeb.Schema.ObjectMutations
-  import_types ElvenhearthPhxWeb.Schema.ObjectSubscriptions
+  import_types ElvenhearthPhxWeb.Schema.{
+    ObjectTypes,
+    ObjectQueries,
+    ObjectMutations,
+    ObjectSubscriptions
+  }
 
   query do
     field :health, :string do
