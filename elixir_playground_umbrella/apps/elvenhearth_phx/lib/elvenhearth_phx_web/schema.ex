@@ -1,6 +1,6 @@
 defmodule ElvenhearthPhxWeb.Schema do
   use Absinthe.Schema
-  use ApolloTracing
+  alias ElvenhearthPhxWeb.Schema.Middleware
 
   import_types ElvenhearthPhxWeb.Schema.{
     ObjectTypes,
@@ -27,4 +27,25 @@ defmodule ElvenhearthPhxWeb.Schema do
     import_fields :object_subscriptions
   end
 
+  def middleware(middleware, field, object) do
+    IO.inspect [
+      object: object.identifier,
+      field: field.identifier
+    ]
+    middleware
+    |> add(:apollo_tracing, field, object)
+    |> add(:changeset_errors, field, object)
+  end
+
+  defp add(middleware, :apollo_tracing, _field, _object) do
+    middleware ++ [ApolloTracing.Middleware.Tracing]
+  end
+
+  defp add(middleware, :changeset_errors, field, %{identifier: :mutation}) do
+    middleware ++ [Middleware.ChangesetErrors]
+  end
+
+  defp add(middleware, :changeset_errors, _field, _object) do
+    middleware
+  end
 end

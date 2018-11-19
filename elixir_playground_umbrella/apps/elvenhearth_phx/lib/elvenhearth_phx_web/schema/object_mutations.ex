@@ -19,7 +19,6 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectMutations do
     field :update_character, :update_character_result do
       arg :input, non_null(:update_character_input)
       resolve &CharacterResolver.update_character/3
-      middleware Middleware.ChangesetErrors
     end
 
     field :update_user, :user do
