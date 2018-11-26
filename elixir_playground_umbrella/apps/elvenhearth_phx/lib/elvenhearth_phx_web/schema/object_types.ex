@@ -49,6 +49,11 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :message, non_null(:string)
   end
 
+  object :session do
+    field :token, :string
+    field :user, :user
+  end
+
   input_object :create_user_input do
     field :username, non_null(:string)
     field :password, non_null(:string)
@@ -75,4 +80,12 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :name, :string
     field :race, :string
   end
+
+  input_object :login_input do
+    field :username, non_null(:string)
+    field :password, non_null(:string)
+    field :role, non_null(:string)
+  end
+
+
 end

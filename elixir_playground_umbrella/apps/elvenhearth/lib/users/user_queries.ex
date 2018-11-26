@@ -1,6 +1,7 @@
 defmodule Elvenhearth.Users.UserQueries do
   import Ecto.Query
 
+  alias Comeonin.Ecto.Password
   alias Elvenhearth.Repo
   alias Elvenhearth.Users.User
 
@@ -12,6 +13,14 @@ defmodule Elvenhearth.Users.UserQueries do
     query =
       from u in User,
       where: u.id == ^id
+
+    Repo.one(query)
+  end
+
+  def get_by_username(username) do
+    query =
+      from u in User,
+      where: u.username == ^username
 
     Repo.one(query)
   end
@@ -31,5 +40,17 @@ defmodule Elvenhearth.Users.UserQueries do
 
   def update(user) do
     Repo.update(user)
+  end
+
+  def authenticate(role, username, password) do
+    user = get_by_username(username)
+
+    with %{password: digest} <- user,
+      true <- Password.valid?(password, digest)
+    do
+      {:ok, user}
+    else
+      _ -> :error
+    end
   end
 end
