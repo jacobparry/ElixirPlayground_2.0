@@ -19,7 +19,7 @@ defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
 
     with {:ok, user} <- UserQueries.create(user) do
         Absinthe.Subscription.publish(ElvenhearthPhxWeb.Endpoint, user, new_user: "*")
-        {:ok, user}
+        {:ok, %{user: user}}
     end
   end
 
