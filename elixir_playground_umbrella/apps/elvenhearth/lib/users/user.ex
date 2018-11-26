@@ -8,13 +8,14 @@ defmodule Elvenhearth.Users.User do
     field :password, Comeonin.Ecto.Password
     field :email, :string
     field :age, :integer
+    field :role, :string
 
     has_many :characters, Elvenhearth.Characters.Character
 
     timestamps()
   end
 
-  @required_fields ~w(username password email)a
+  @required_fields ~w(username password email role)a
   @optional_fields ~w(age)a
 
 

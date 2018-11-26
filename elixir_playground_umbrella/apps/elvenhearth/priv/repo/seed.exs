@@ -6,19 +6,22 @@ unless(UserQueries.any) do
     User.changeset(%User{}, %{
       username: "user1",
       password: "1234",
-      email: "user1@test.com"
+      email: "user1@test.com",
+      role: "DM"
       }
     ),
     User.changeset(%User{}, %{
       username: "user2",
       password: "1234",
-      email: "user2@test.com"
+      email: "user2@test.com",
+      role: "PLAYER"
       }
     ),
     User.changeset(%User{}, %{
       username: "user3",
       password: "1234",
-      email: "user3@test.com"
+      email: "user3@test.com",
+      role: "PLAYER"
       }
     )
   ]
