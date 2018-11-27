@@ -10,10 +10,15 @@ defmodule ElvenhearthPhxWeb.Resolvers.CharacterResolver do
     {:ok, CharacterQueries.get_all_for_user(user)}
   end
 
-  def create_character(_parent, %{input: params} = args, _resolution) do
-    character = Character.changeset(%Character{}, params)
-    with {:ok, character} <- CharacterQueries.create(character) do
-        {:ok, %{character: character}}
+  def create_character(_parent, %{input: params} = args, %{context: context} = _resolution) do
+    case context do
+      %{current_user: %{role: "DM"}} ->
+        character = Character.changeset(%Character{}, params)
+        with {:ok, character} <- CharacterQueries.create(character) do
+            {:ok, %{character: character}}
+        end
+      _ ->
+        {:error, "unauthorized"}
     end
   end
 
