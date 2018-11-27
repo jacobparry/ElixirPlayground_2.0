@@ -11,6 +11,7 @@ defmodule ElvenhearthPhxWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug ElvenhearthPhxWeb.Context
   end
 
   scope "/", ElvenhearthPhxWeb do
@@ -21,6 +22,10 @@ defmodule ElvenhearthPhxWeb.Router do
 
   scope "/playground" do
     pipe_through :api
+
+    forward("/api", Absinthe.Plug,
+      schema: ElvenhearthPhxWeb.Schema
+    )
 
     forward("/graphiql", Absinthe.Plug.GraphiQL,
       schema: ElvenhearthPhxWeb.Schema,

@@ -28,10 +28,10 @@ defmodule ElvenhearthPhxWeb.Schema do
   end
 
   def middleware(middleware, field, object) do
-    IO.inspect [
-      object: object.identifier,
-      field: field.identifier
-    ]
+    # IO.inspect [
+    #   object: object.identifier,
+    #   field: field.identifier
+    # ]
     middleware
     |> add(:apollo_tracing, field, object)
     |> add(:items, field, object)
