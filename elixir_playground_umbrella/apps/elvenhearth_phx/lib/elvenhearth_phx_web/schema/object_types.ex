@@ -3,7 +3,31 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
 
   alias ElvenhearthPhxWeb.Resolvers.{UserResolver, CharacterResolver}
 
-  object :user do
+  interface :user do
+    field :username, :string
+    field :password, :string
+    field :email, non_null(:string)
+
+    resolve_type fn
+      %{role: "DM"}, _ -> :dungeon_master
+      %{role: "PLAYER"}, _ -> :player
+    end
+  end
+
+  object :dungeon_master do
+    interface :user
+    field :username, :string
+    field :password, :string do
+      resolve &UserResolver.anonymize_password/3
+    end
+    field :email, non_null(:string)
+    field :all_characters, list_of(:character) do
+      resolve &CharacterResolver.list_characters/3
+    end
+  end
+
+  object :player do
+    interface :user
     field :username, :string
     field :password, :string do
       resolve &UserResolver.anonymize_password/3
@@ -13,6 +37,7 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :characters, list_of(:character) do
       resolve &CharacterResolver.get_characters_for_user/3
     end
+
   end
 
   object :character do
@@ -52,6 +77,11 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
   object :session do
     field :token, :string
     field :user, :user
+  end
+
+  enum :role do
+    value :dungeon_master
+    value :player
   end
 
   input_object :create_user_input do

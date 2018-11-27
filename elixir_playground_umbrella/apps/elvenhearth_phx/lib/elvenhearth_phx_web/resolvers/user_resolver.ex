@@ -39,6 +39,19 @@ defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
     end
   end
 
+  def login(_parent, %{input: %{username: username, password: password, role: role}} = args, _resolution) do
+    case UserQueries.authenticate(role, username, password) do
+      {:ok, user} ->
+        token = ElvenhearthPhxWeb.Authentication.sign(%{
+          role: role,
+          id: user.id
+        })
+        {:ok, %{token: token, user: user}}
+      _ ->
+        {:error, "Incorrect password or username"}
+    end
+  end
+
   defp error_details(changeset) do
     changeset
     |> Ecto.Changeset.traverse_errors(fn {msg, _} -> msg end)
