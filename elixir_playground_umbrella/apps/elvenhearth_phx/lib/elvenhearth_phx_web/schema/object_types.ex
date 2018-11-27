@@ -24,6 +24,9 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field :all_characters, list_of(:character) do
       resolve &CharacterResolver.list_characters/3
     end
+    field :all_users, list_of(:user) do
+      resolve &UserResolver.list_users/3
+    end
   end
 
   object :player do
