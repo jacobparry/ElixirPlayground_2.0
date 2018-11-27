@@ -6,6 +6,7 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectMutations do
   object :object_mutations do
     field :create_character, :create_character_result do
       arg :input, non_null(:create_character_input)
+      middleware Middleware.Authorize, "DM"
       resolve &CharacterResolver.create_character/3
     end
 
