@@ -2,6 +2,7 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectQueries do
   use Absinthe.Schema.Notation
 
   alias ElvenhearthPhxWeb.Schema.Middleware
+
   alias ElvenhearthPhxWeb.Resolvers.{
     AuthorizationResolver,
     UserResolver,
@@ -10,8 +11,8 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectQueries do
 
   object :object_queries do
     field :me, :user do
-      middleware Middleware.Authorize, :any
-      resolve &AuthorizationResolver.me/3
+      middleware(Middleware.Authorize, :any)
+      resolve(&AuthorizationResolver.me/3)
     end
 
     # field :users, list_of(:user) do

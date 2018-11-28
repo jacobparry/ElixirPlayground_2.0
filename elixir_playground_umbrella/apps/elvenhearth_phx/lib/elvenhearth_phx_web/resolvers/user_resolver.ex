@@ -18,8 +18,8 @@ defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
     user = User.changeset(%User{}, params)
 
     with {:ok, user} <- UserQueries.create(user) do
-        Absinthe.Subscription.publish(ElvenhearthPhxWeb.Endpoint, user, new_user: "*")
-        {:ok, %{user: user}}
+      Absinthe.Subscription.publish(ElvenhearthPhxWeb.Endpoint, user, new_user: "*")
+      {:ok, %{user: user}}
     end
   end
 
@@ -27,26 +27,34 @@ defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
     user = UserQueries.get_by_id(params[:id])
     updated_user = User.changeset(user, params)
     IO.inspect(updated_user)
+
     case UserQueries.update(updated_user) do
       {:ok, _} = success ->
         success
+
       {:error, changeset} ->
         {
           :error,
-          message: "Could not update user",
-          details: error_details(changeset)
+          message: "Could not update user", details: error_details(changeset)
         }
     end
   end
 
-  def login(_parent, %{input: %{username: username, password: password, role: role}} = args, _resolution) do
+  def login(
+        _parent,
+        %{input: %{username: username, password: password, role: role}} = args,
+        _resolution
+      ) do
     case UserQueries.authenticate(role, username, password) do
       {:ok, user} ->
-        token = ElvenhearthPhxWeb.Authentication.sign(%{
-          role: role,
-          id: user.id
-        })
+        token =
+          ElvenhearthPhxWeb.Authentication.sign(%{
+            role: role,
+            id: user.id
+          })
+
         {:ok, %{token: token, user: user}}
+
       _ ->
         {:error, "Incorrect password or username"}
     end

@@ -6,8 +6,6 @@ defmodule ElvenhearthPhxWeb.Authentication do
   end
 
   def verify(token) do
-    Phoenix.Token.verify(ElvenhearthPhxWeb.Endpoint, @user_salt, token, [
-      max_age: 365 * 24 * 3600
-    ])
+    Phoenix.Token.verify(ElvenhearthPhxWeb.Endpoint, @user_salt, token, max_age: 365 * 24 * 3600)
   end
 end

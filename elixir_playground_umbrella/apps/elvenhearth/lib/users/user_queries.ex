@@ -6,21 +6,23 @@ defmodule Elvenhearth.Users.UserQueries do
   alias Elvenhearth.Users.User
 
   def get_all do
-    Repo.all(from User)
+    Repo.all(from(User))
   end
 
   def get_by_id(id) do
     query =
-      from u in User,
-      where: u.id == ^id
+      from(u in User,
+        where: u.id == ^id
+      )
 
     Repo.one(query)
   end
 
   def get_by_username(username) do
     query =
-      from u in User,
-      where: u.username == ^username
+      from(u in User,
+        where: u.username == ^username
+      )
 
     Repo.one(query)
   end
@@ -28,9 +30,11 @@ defmodule Elvenhearth.Users.UserQueries do
   def any do
     count =
       Repo.one(
-        from u in User,
-        select: count(u.id)
+        from(u in User,
+          select: count(u.id)
+        )
       )
+
     count != 0
   end
 
@@ -46,8 +50,7 @@ defmodule Elvenhearth.Users.UserQueries do
     user = get_by_username(username)
 
     with %{password: digest} <- user,
-      true <- Password.valid?(password, digest)
-    do
+         true <- Password.valid?(password, digest) do
       {:ok, user}
     else
       _ -> :error

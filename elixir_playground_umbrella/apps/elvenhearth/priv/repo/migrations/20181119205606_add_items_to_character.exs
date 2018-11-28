@@ -3,7 +3,7 @@ defmodule Elvenhearth.Repo.Migrations.AddItemsToCharacter do
 
   def change do
     alter table(:characters) do
-      add :items, :map
+      add(:items, :map)
     end
   end
 end

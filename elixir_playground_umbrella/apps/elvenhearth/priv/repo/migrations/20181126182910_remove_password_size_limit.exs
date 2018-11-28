@@ -3,8 +3,8 @@ defmodule Elvenhearth.Repo.Migrations.RemovePasswordSizeLimit do
 
   def change do
     alter table(:users) do
-      modify :password, :string, size: nil
-      add :role, :string
+      modify(:password, :string, size: nil)
+      add(:role, :string)
     end
   end
 end

@@ -31,7 +31,8 @@ use Mix.Config
 
 config :elvenhearth, Elvenhearth.Repo,
   adapter: Ecto.Adapters.Postgres,
-  database: "elvenhearth_01", # Names the Database whatever you want
+  # Names the Database whatever you want
+  database: "elvenhearth_01",
   username: "postgres",
   password: "postgres"
 

@@ -3,27 +3,29 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectSubscriptions do
 
   object :object_subscriptions do
     field :new_user, :user do
-      config fn _args, _info ->
+      config(fn _args, _info ->
         {:ok, topic: "*"}
-      end
+      end)
     end
 
     field :update_user, :user do
-      arg :id, non_null(:id)
+      arg(:id, non_null(:id))
 
-      config fn args, _info ->
+      config(fn args, _info ->
         {:ok, topic: args.id}
-      end
+      end)
 
-      trigger [:update_user], topic: fn
-        user -> [user.id]
-        _ -> []
-      end
+      trigger([:update_user],
+        topic: fn
+          user -> [user.id]
+          _ -> []
+        end
+      )
 
-      resolve fn user, _, _ ->
+      resolve(fn user, _, _ ->
         IO.inspect(user)
         {:ok, user}
-      end
+      end)
     end
   end
 end

@@ -26,9 +26,7 @@ defmodule ElvenhearthPhxWeb.ConnCase do
     end
   end
 
-
   setup _tags do
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
-
 end

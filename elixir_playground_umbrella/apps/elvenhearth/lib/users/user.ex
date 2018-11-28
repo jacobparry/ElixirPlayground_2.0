@@ -4,20 +4,19 @@ defmodule Elvenhearth.Users.User do
   import Ecto.Changeset
 
   schema "users" do
-    field :username, :string
-    field :password, Comeonin.Ecto.Password
-    field :email, :string
-    field :age, :integer
-    field :role, :string
+    field(:username, :string)
+    field(:password, Comeonin.Ecto.Password)
+    field(:email, :string)
+    field(:age, :integer)
+    field(:role, :string)
 
-    has_many :characters, Elvenhearth.Characters.Character
+    has_many(:characters, Elvenhearth.Characters.Character)
 
     timestamps()
   end
 
   @required_fields ~w(username password email role)a
   @optional_fields ~w(age)a
-
 
   def changeset(user, params \\ %{}) do
     user

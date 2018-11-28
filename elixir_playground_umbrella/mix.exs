@@ -16,14 +16,18 @@ defmodule ElixirPlaygroundUmbrella.MixProject do
   #
   # Run "mix help deps" for examples and options.
   defp deps do
-    []
+    [
+      {:credo, "~> 1.0.0", only: [:dev, :test], runtime: false}
+    ]
   end
 
   defp aliases do
     [
       {:setup, ["ecto.drop", "ecto.create", "ecto.migrate"]},
-      {:reset, ["ecto.drop", "ecto.create", "ecto.migrate", "run apps/elvenhearth/priv/repo/seed.exs"]},
-      {:seed, "run apps/elvenhearth/priv/repo/seed.exs"}
+      {:reset,
+       ["ecto.drop", "ecto.create", "ecto.migrate", "run apps/elvenhearth/priv/repo/seed.exs"]},
+      {:seed, "run apps/elvenhearth/priv/repo/seed.exs"},
+      {:review, ["format", "test", "credo --strict"]}
     ]
   end
 end

@@ -3,10 +3,7 @@ defmodule ElvenhearthPhxWeb.Schema.Middleware.ChangesetErrors do
 
   def call(resolution, _) do
     with %{errors: [%Ecto.Changeset{} = changeset]} <- resolution do
-      %{resolution |
-        value: %{errors: transform_errors(changeset)},
-        errors: []
-      }
+      %{resolution | value: %{errors: transform_errors(changeset)}, errors: []}
     end
   end
 

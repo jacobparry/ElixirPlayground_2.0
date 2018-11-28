@@ -2,12 +2,12 @@ defmodule ElvenhearthPhxWeb.Schema do
   use Absinthe.Schema
   alias ElvenhearthPhxWeb.Schema.Middleware
 
-  import_types ElvenhearthPhxWeb.Schema.{
+  import_types(ElvenhearthPhxWeb.Schema.{
     ObjectTypes,
     ObjectQueries,
     ObjectMutations,
     ObjectSubscriptions
-  }
+  })
 
   query do
     field :health, :string do
@@ -16,15 +16,15 @@ defmodule ElvenhearthPhxWeb.Schema do
       end)
     end
 
-    import_fields :object_queries
+    import_fields(:object_queries)
   end
 
   mutation do
-    import_fields :object_mutations
+    import_fields(:object_mutations)
   end
 
   subscription do
-    import_fields :object_subscriptions
+    import_fields(:object_subscriptions)
   end
 
   def middleware(middleware, field, object) do
@@ -48,6 +48,7 @@ defmodule ElvenhearthPhxWeb.Schema do
 
   defp add(middleware, :items, field, %{identifier: :item_info} = object) do
     new_middleware = {Absinthe.Middleware.MapGet, to_string(field.identifier)}
+
     middleware
     |> Absinthe.Schema.replace_default(new_middleware, field, object)
   end

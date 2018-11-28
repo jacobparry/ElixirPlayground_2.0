@@ -3,9 +3,9 @@ defmodule Elvenhearth.Repo.Migrations.AddCharactersTable do
 
   def change do
     create table(:characters) do
-      add :name, :string
-      add :race, :string
-      add :user_id, references(:users, on_delete: :nothing)
+      add(:name, :string)
+      add(:race, :string)
+      add(:user_id, references(:users, on_delete: :nothing))
 
       timestamps()
     end

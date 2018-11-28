@@ -1,33 +1,30 @@
 alias Elvenhearth.Users.{User, UserQueries}
 alias Elvenhearth.Characters.{Character, CharacterQueries}
 
-unless(UserQueries.any) do
+unless(UserQueries.any()) do
   users = [
     User.changeset(%User{}, %{
       username: "user1",
       password: "1234",
       email: "user1@test.com",
       role: "DM"
-      }
-    ),
+    }),
     User.changeset(%User{}, %{
       username: "user2",
       password: "1234",
       email: "user2@test.com",
       role: "PLAYER"
-      }
-    ),
+    }),
     User.changeset(%User{}, %{
       username: "user3",
       password: "1234",
       email: "user3@test.com",
       role: "PLAYER"
-      }
-    )
+    })
   ]
 
   inserted_users =
-    Enum.map(users, fn(user) ->
+    Enum.map(users, fn user ->
       UserQueries.create(user)
     end)
 
@@ -63,7 +60,7 @@ unless(UserQueries.any) do
     }),
     Character.changeset(%Character{}, %{
       name: "Trolloc",
-      race: "Shadow Spawn",
+      race: "Shadow Spawn"
     })
   ]
 

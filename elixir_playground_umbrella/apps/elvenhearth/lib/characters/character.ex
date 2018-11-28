@@ -3,10 +3,10 @@ defmodule Elvenhearth.Characters.Character do
   import Ecto.Changeset
 
   schema "characters" do
-    field :name, :string
-    field :race, :string
-    field :items, {:array, :map}
-    belongs_to :user, Elvenhearth.Users.User
+    field(:name, :string)
+    field(:race, :string)
+    field(:items, {:array, :map})
+    belongs_to(:user, Elvenhearth.Users.User)
 
     timestamps()
   end
