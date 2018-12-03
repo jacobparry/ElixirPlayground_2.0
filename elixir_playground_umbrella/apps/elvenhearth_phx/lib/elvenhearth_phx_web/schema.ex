@@ -40,7 +40,7 @@ defmodule ElvenhearthPhxWeb.Schema do
   end
 
   defp add(middleware, :apollo_tracing, _field, _object) do
-    middleware ++ [ApolloTracing.Middleware.Tracing]
+    [ApolloTracing.Middleware.Tracing, ApolloTracing.Middleware.Caching] ++ middleware
   end
 
   defp add(middleware, :changeset_errors, field, %{identifier: :mutation}) do

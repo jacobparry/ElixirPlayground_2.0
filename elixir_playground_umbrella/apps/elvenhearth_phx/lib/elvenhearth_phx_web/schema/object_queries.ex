@@ -15,12 +15,12 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectQueries do
       resolve(&AuthorizationResolver.me/3)
     end
 
-    # field :users, list_of(:user) do
-    #   resolve &UserResolver.list_users/3
-    # end
+    field :users, list_of(:user) do
+      resolve(&UserResolver.list_users/3)
+    end
 
-    # field :characters, list_of(:character) do
-    #   resolve &CharacterResolver.list_characters/3
-    # end
+    field :characters, list_of(:character) do
+      resolve(&CharacterResolver.list_characters/3)
+    end
   end
 end

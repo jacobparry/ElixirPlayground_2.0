@@ -9,6 +9,8 @@ defmodule Elvenhearth.Characters.CharacterQueries do
   end
 
   def get_all_for_user(user) do
+    Process.sleep(50)
+
     Repo.all(
       from(c in Character,
         where: c.user_id == ^user.id
