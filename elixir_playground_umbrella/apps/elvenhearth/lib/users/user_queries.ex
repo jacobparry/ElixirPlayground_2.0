@@ -10,12 +10,28 @@ defmodule Elvenhearth.Users.UserQueries do
   end
 
   def get_by_id(id) do
+    Process.sleep(50)
+
     query =
       from(u in User,
         where: u.id == ^id
       )
 
     Repo.one(query)
+  end
+
+  def get_by_ids(_params, user_ids) do
+    Process.sleep(50)
+
+    query =
+      from(u in User,
+        where: u.id in ^user_ids,
+        select: {u.id, u}
+      )
+
+    query
+    |> Repo.all()
+    |> Map.new()
   end
 
   def get_by_username(username) do

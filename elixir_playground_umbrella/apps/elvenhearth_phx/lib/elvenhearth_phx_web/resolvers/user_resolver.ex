@@ -1,4 +1,6 @@
 defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
+  import Absinthe.Resolution.Helpers, only: [batch: 3]
+
   alias Elvenhearth.Users.UserQueries
   alias Elvenhearth.Users.User
 
@@ -11,7 +13,9 @@ defmodule ElvenhearthPhxWeb.Resolvers.UserResolver do
   end
 
   def get_user_for_character(character, _, _) do
-    {:ok, UserQueries.get_by_id(character.user_id)}
+    batch({UserQueries, :get_by_ids}, character.user_id, fn users ->
+      {:ok, Map.get(users, character.user_id)}
+    end)
   end
 
   def create_user(_parent, %{input: params} = args, _resolution) do
