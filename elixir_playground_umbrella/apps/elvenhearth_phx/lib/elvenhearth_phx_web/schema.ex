@@ -36,6 +36,7 @@ defmodule ElvenhearthPhxWeb.Schema do
     |> add(:apollo_tracing, field, object)
     |> add(:items, field, object)
     |> add(:changeset_errors, field, object)
+    |> add(:debug, field, object)
   end
 
   defp add(middleware, :apollo_tracing, _field, _object) do
@@ -51,6 +52,14 @@ defmodule ElvenhearthPhxWeb.Schema do
 
     middleware
     |> Absinthe.Schema.replace_default(new_middleware, field, object)
+  end
+
+  defp add(middleware, :debug, _field, _object) do
+    if System.get_env("DEBUG") do
+      [{Middleware.Debug, :start}] ++ middleware
+    else
+      middleware
+    end
   end
 
   defp add(middleware, _middleware_type, _field, _object) do

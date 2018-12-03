@@ -8,6 +8,10 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
     field(:password, :string)
     field(:email, non_null(:string))
 
+    field :characters, list_of(:character) do
+      resolve(&CharacterResolver.get_characters_for_user/3)
+    end
+
     resolve_type(fn
       %{role: "DM"}, _ -> :dungeon_master
       %{role: "PLAYER"}, _ -> :player
@@ -30,6 +34,10 @@ defmodule ElvenhearthPhxWeb.Schema.ObjectTypes do
 
     field :all_users, list_of(:user) do
       resolve(&UserResolver.list_users/3)
+    end
+
+    field :characters, list_of(:character) do
+      resolve(&CharacterResolver.get_characters_for_user/3)
     end
   end
 
