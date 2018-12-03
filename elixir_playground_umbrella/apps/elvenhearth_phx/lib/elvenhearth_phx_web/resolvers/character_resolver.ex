@@ -1,4 +1,6 @@
 defmodule ElvenhearthPhxWeb.Resolvers.CharacterResolver do
+  import Absinthe.Resolution.Helpers, only: [async: 1]
+
   alias Elvenhearth.Characters.CharacterQueries
   alias Elvenhearth.Characters.Character
 
@@ -7,7 +9,10 @@ defmodule ElvenhearthPhxWeb.Resolvers.CharacterResolver do
   end
 
   def get_characters_for_user(user, _, _) do
-    {:ok, CharacterQueries.get_all_for_user(user)}
+    async(fn ->
+      {:ok, CharacterQueries.get_all_for_user(user)}
+    end)
+    |> IO.inspect()
   end
 
   def create_character(_parent, %{input: params} = args, _resolution) do
