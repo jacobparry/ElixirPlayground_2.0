@@ -26,4 +26,5 @@ defmodule ElvenhearthPhxWeb.Resolvers.CharacterResolver do
       {:ok, %{character: character}}
     end
   end
+
 end
